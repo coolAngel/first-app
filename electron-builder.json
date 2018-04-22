@@ -1,0 +1,16 @@
+{
+  "appId": "com.github.coolAngel.first-app",
+  "copyright": "Copyright © 2018 coolLab",
+  "win": {
+    "icon": "build/icon.png",
+    "certificateFile" : "certificate.pfx",
+    "target": [{
+      "target": "nsis",
+      "arch": ["x64", "ia32"]
+    }],
+    "publish": ["github"]
+  },
+  "files": [
+    "!**/bower_components${/*}/*"
+  ]
+}

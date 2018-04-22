@@ -1,0 +1,27 @@
+{
+  "name": "first-app",
+  "productName": "First App",
+  "version": "0.0.1",
+  "description": "A Simple test application with Polymer2.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "help": "electron-packager --help",
+    "pack": "electron-packager . --overwrite --ignore=bower_components --out=out --asar=false",
+    "build": "build",
+    "release": "build",
+    "publish": "build -p always"
+  },
+  "author": "coolAngel",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "1.8.4",
+    "electron-builder": "^20.10.0"
+  },
+  "dependencies": {
+    "date-fns": "^1.29.0",
+    "electron-log": "^2.2.14",
+    "electron-updater": "^2.21.8"
+  }
+}

@@ -1,0 +1,8 @@
+# Polymer need bower but we dont.
+/bower_components
+
+# node modules directory
+/node_modules
+
+# Electron-builder distributable 
+/dist
