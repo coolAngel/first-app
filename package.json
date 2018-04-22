@@ -1,16 +1,14 @@
 {
   "name": "first-app",
   "productName": "First App",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A Simple test application with Polymer2.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "help": "electron-packager --help",
-    "pack": "electron-packager . --overwrite --ignore=bower_components --out=out --asar=false",
+    "help": "electron-builder --help",
     "build": "build",
-    "release": "build",
     "publish": "build -p always"
   },
   "author": "coolAngel",

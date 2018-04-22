@@ -6,3 +6,7 @@
 
 # Electron-builder distributable 
 /dist
+
+test_me.txt
+
+yarn.lock

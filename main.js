@@ -3,7 +3,7 @@ const url = require("url");
 const { app, BrowserWindow } = require("electron");
 
 const log = require("electron-log");
-const { autoUpdater } = require("electron-updater");
+const autoUpdater = require("electron-updater").autoUpdater;
 
 
 //-------------------------------------------------------------------
@@ -19,9 +19,16 @@ autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
 
 
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send('message', text);
+}
 
 function createWindow() {
   // Create the browser window.
@@ -48,10 +55,52 @@ function createWindow() {
   });
 }
 
+
+
+
+
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+  log.info('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  log.info('Update available.');
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  log.info('Update not available.');
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  log.info('Error in auto-updater. ' + err);
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  log.info(log_message);
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  log.info('Update downloaded');
+  sendStatusToWindow('Update downloaded');
+});
+
+
+
+
+
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+app.on("ready", () => {
+  createWindow()
+  autoUpdater.checkForUpdatesAndNotify();
+});
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
