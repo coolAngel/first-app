@@ -14,8 +14,6 @@
     }]
   },
   "files": [
-    "!**/bower_components${/*}/*",
-    "!**/_layouts${/*}/*",
-    "!_config.yml"
+    "!**/bower_components${/*}/*"
   ]
 }
