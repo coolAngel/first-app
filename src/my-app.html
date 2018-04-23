@@ -16,6 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="_components/iron-pages/iron-pages.html">
 <link rel="import" href="_components/iron-selector/iron-selector.html">
 <link rel="import" href="_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="_components/paper-toast/paper-toast.html">
+<link rel="import" href="_components/paper-button/paper-button.html">
 
 <link rel="import" href="my-icons.html">
 
@@ -28,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
+        --app-primary-color: #607d8b;
         --app-secondary-color: black;
 
         display: block;
@@ -57,11 +59,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-decoration: none;
         color: var(--app-secondary-color);
         line-height: 40px;
+        -webkit-user-drag: none;
       }
 
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
+      }
+
+      .yellow-button {
+        text-transform: none;
+        color: #eeff41;
       }
     </style>
 
@@ -84,12 +92,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>polyElectron</div>
 
-            <span>[[version]]</span> |
+            <span>[[version]]</span> | 
             <span>[[today]]</span>
           </app-toolbar>
         </app-header>
-
-        <div>[[message]]</div>
 
         <iron-pages
             selected="[[page]]"
@@ -102,13 +108,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-view404 name="view404"></my-view404>
         </iron-pages>
 
+        
       </app-header-layout>
     </app-drawer-layout>
+    
+    <paper-toast id="updaterToast"></paper-toast>
   </template>
 
   <script>
     const { format } = require('date-fns')
-    const { ipcRenderer, remote } = require('electron');
+    const { ipcRenderer } = require('electron');
+    const { app } = require('electron').remote
 
 
     // Gesture events like tap and track generated from touch will not be
@@ -131,14 +141,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               return format(new Date(), 'DD/MM/YYYY');
             }
           },
-          message: {
-            type: String
-          },
           version: {
             type: String,
             value: function () {
-              console.log('pop', remote)
-              // return app.getVersion()
+              return app.getVersion()
             }
           }
         };
@@ -153,10 +159,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.page = 'view1'
 
         // Listen for autoUpdater messages
-        ipcRenderer.on('updater-message', (event, text) => {
-          console.log('we have a message.....', text)
-          this.message = text
-        })
+        ipcRenderer.on('updater-message', 
+          (event, message, err) => this._onUpdaterMessage(message, err))
+
       }
 
       _pageChanged (page) {
@@ -164,6 +169,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!this.$.drawer.persistent) {
           this.$.drawer.close();
         }
+      }
+
+      _onUpdaterMessage (message, infoError) {
+        
+        const updaterToast = this.$.updaterToast
+
+        switch (message) {
+          case 'checking-for-update':
+            updaterToast.text = 'Checking for Updates.'
+            break;
+          case 'update-available':
+            updaterToast.text = 'There is a new Version of the App. Download Started.'
+            console.log(infoError)
+            break;
+          case 'update-not-available':
+            updaterToast.text = 'The App Is up to date.'
+            break;
+          case 'update-error':
+            updaterToast.text = 'Sorry, An error occur.'
+            console.log(infoError)
+            break;
+          case 'update-downloaded':
+            updaterToast.text = 'Updates downloaded. Application will Restart now.'
+            break;
+        }
+        updaterToast.show()
       }
     }
 

@@ -4,7 +4,7 @@ const { app, BrowserWindow } = require("electron");
 
 const log = require("electron-log");
 const autoUpdater = require("electron-updater").autoUpdater;
-
+const debug = /--debug/.test(process.argv[2])
 
 //-------------------------------------------------------------------
 // Logging
@@ -25,14 +25,14 @@ log.info('App starting...', app.getVersion());
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-function sendStatusToWindow(text) {
-  log.info(text);
-  win.webContents.send('updater-message', text);
+function sendStatusToWindow(text, err) {
+  win.webContents.send('updater-message', text, err);
 }
 
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 });
+  win = new BrowserWindow({ width: 800, height: 600, show: false });
+  win.setProgressBar(2)
 
   // and load the index.html of the app.
   win.loadURL(
@@ -43,8 +43,12 @@ function createWindow() {
     })
   );
 
-  // Open the DevTools.
-  win.webContents.openDevTools();
+  // Launch fullscreen with DevTools open, usage: npm run debug
+  if (debug) {
+    win.webContents.openDevTools()
+    win.maximize()
+    require('devtron').install()
+  }
 
   // Emitted when the window is closed.
   win.on("closed", () => {
@@ -53,6 +57,10 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 }
 
 
@@ -61,37 +69,32 @@ function createWindow() {
 
 
 autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-  log.info('Checking for update...');
+  sendStatusToWindow('update-checking', null);
 })
+
 autoUpdater.on('update-available', (info) => {
-  log.info('Update available.');
-  sendStatusToWindow('Update available.');
+  sendStatusToWindow('update-available', info);
 })
+
 autoUpdater.on('update-not-available', (info) => {
-  log.info('Update not available.');
-  sendStatusToWindow('Update not available.');
+  sendStatusToWindow('update-not-available', info);
 })
+
 autoUpdater.on('error', (err) => {
-  log.info('Error in auto-updater. ' + err);
-  sendStatusToWindow('Error in auto-updater. ' + err);
+  sendStatusToWindow('update-error', err);
 })
+
 autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  log.info(log_message);
-  sendStatusToWindow(log_message);
+  percent = progressObj.percent / 100
+  win.setProgressBar(percent)
 })
+
 autoUpdater.on('update-downloaded', (info) => {
-  log.info('Update downloaded', info);
-  sendStatusToWindow('Update downloaded. Plz restart the Application.');
+  win.setProgressBar(-1)
+  sendStatusToWindow('update-downloaded', null);
+  
+  setTimeout(() => autoUpdater.quitAndInstall(), 5000) 
 });
-
-
-
-
-
 
 
 // This method will be called when Electron has finished

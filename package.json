@@ -1,11 +1,12 @@
 {
   "name": "first-app",
   "productName": "First App",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "A Simple test application with Polymer2.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "electron . --debug",
     "test": "echo \"Error: no test specified\" && exit 1",
     "help": "electron-builder --help",
     "build": "build",
@@ -14,6 +15,7 @@
   "author": "coolAngel",
   "license": "MIT",
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "1.8.4",
     "electron-builder": "^20.10.0"
   },
