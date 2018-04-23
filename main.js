@@ -16,7 +16,7 @@ const autoUpdater = require("electron-updater").autoUpdater;
 //-------------------------------------------------------------------
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+log.info('App starting...', app.getVersion());
 
 
 
@@ -27,7 +27,7 @@ let win;
 
 function sendStatusToWindow(text) {
   log.info(text);
-  win.webContents.send('message', text);
+  win.webContents.send('updater-message', text);
 }
 
 function createWindow() {
@@ -84,8 +84,8 @@ autoUpdater.on('download-progress', (progressObj) => {
   sendStatusToWindow(log_message);
 })
 autoUpdater.on('update-downloaded', (info) => {
-  log.info('Update downloaded');
-  sendStatusToWindow('Update downloaded');
+  log.info('Update downloaded', info);
+  sendStatusToWindow('Update downloaded. Plz restart the Application.');
 });
 
 

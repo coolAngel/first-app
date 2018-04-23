@@ -1,7 +1,7 @@
 {
   "name": "first-app",
   "productName": "First App",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "description": "A Simple test application with Polymer2.0",
   "main": "main.js",
   "scripts": {
