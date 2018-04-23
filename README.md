@@ -13,3 +13,17 @@ release your app on github
 ```
 > $env:GH_TOKEN="githubPersonalToken" ; npm run release
 ```
+
+## Set certificate path
+
+```
+PS> $env:WIN_CSC_LINK="C:\certificate.p12" ;
+```
+
+## Set certificate password
+
+```
+PS> $env:WIN_CSC_KEY_PASSWORD="password" ;
+```
+
+> if password contains special chars you have to escape them.

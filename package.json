@@ -1,7 +1,7 @@
 {
   "name": "first-app",
   "productName": "First App",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Simple test application with Polymer2.0",
   "main": "main.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "dev": "electron . --debug",
     "test": "echo \"Error: no test specified\" && exit 1",
     "help": "electron-builder --help",
+    "postinstall": "electron-builder install-app-deps",
     "build": "build",
     "publish": "build -p always"
   },
