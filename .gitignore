@@ -7,6 +7,9 @@
 # Electron-builder distributable 
 /dist
 
+# Self Signed Cert
+*.pfx
+
 test_me.txt
 
 yarn.lock

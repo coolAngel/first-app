@@ -1,8 +1,8 @@
 {
-  "name": "first-app",
-  "productName": "First App",
-  "version": "0.1.1",
-  "description": "A Simple test application with Polymer2.0",
+  "name": "poly-electron",
+  "productName": "polyElectron",
+  "version": "0.1.2",
+  "description": "Electron with Polymer2.0",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -11,7 +11,7 @@
     "help": "electron-builder --help",
     "postinstall": "electron-builder install-app-deps",
     "build": "build",
-    "publish": "build -p always"
+    "release": "build -p always"
   },
   "author": "coolAngel",
   "license": "MIT",
