@@ -3,15 +3,10 @@
   "copyright": "Copyright © 2018 coolLab",
   "win": {
     "icon": "build/icon.png",
-    "target": [{
-      "target": "nsis",
-      "arch": ["x64", "ia32"]
-    }],
-    "publish": [{
-      "provider": "github",
-      "owner": "coolAngel",
-      "releaseType": "draft"
-    }]
+    "target": [ { "target": "nsis", "arch": [  "x64", "ia32" ] } ],
+    "certificateFile": "coolLaboratory.pfx",
+    "legalTrademarks": "Copyright (c) 2018 coolLaboratory",
+    "publish": [ { "provider": "github", "releaseType": "draft" } ]
   },
   "files": [
     "!**/bower_components${/*}/*",

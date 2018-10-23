@@ -10,6 +10,12 @@
 # Self Signed Cert
 *.pfx
 
+# env variables
+*.env
+.env.*
+!.env.example
+!*.env.example
+
 test_me.txt
 
 yarn.lock
